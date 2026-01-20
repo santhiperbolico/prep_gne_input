@@ -1,6 +1,9 @@
 """
 Configuration of files to be read
 """
+
+import os
+
 sims = ['GP20','GP20UNIT1Gpc']
 
 def get_config(simtype, snap, laptop=False, verbose=False):
@@ -95,18 +98,7 @@ def get_GP20_config(snap, laptop=False, verbose=False):
             'high_limits': [None, boxside, boxside, boxside]
         }
     }
-
-
-    # Define the lines and luminosity names
-    config['lines'] = ['Halpha', 'Hbeta', 'NII6583', 'OII3727', 'OIII5007', 'SII6716']
-    config['line_prefix'] = 'L_tot_'
-    config['line_suffix_ext'] = '_ext'
-
-    line_datasets = []
-    for line in config['lines']:
-        line_datasets.append(f"{config['line_prefix']}{line}")
-        line_datasets.append(f"{config['line_prefix']}{line}{config['line_suffix_ext']}")
-
+    
     # File properties to extract
     config['file_props'] = {
         'galaxies.hdf5': {
@@ -133,10 +125,17 @@ def get_GP20_config(snap, laptop=False, verbose=False):
         },
         'tosedfit.hdf5': {
             'group': 'Output001',
-            'datasets': ['mag_UKIRT-K_o_tot_ext', 'mag_SDSSz0.1-r_o_tot_ext'] + line_datasets,
-            'units': ['AB apparent'] * 2 + ['1e40 h^2 erg/s'] * len(line_datasets)
+            'datasets': ['mag_UKIRT-K_o_tot_ext', 'mag_SDSSz0.1-r_o_tot_ext',
+                         'L_tot_Halpha','L_tot_Halpha_ext',
+                         'L_tot_Hbeta','L_tot_Hbeta_ext',
+                         'L_tot_NII6583','L_tot_NII6583_ext',
+                         'L_tot_OII3727','L_tot_OII3727_ext',
+                         'L_tot_OIII5007','L_tot_OIII5007_ext',
+                         'L_tot_SII6716','L_tot_SII6716_ext'],
+            'units': ['AB apparent'] * 2 + ['h^2 erg/s'] * 12
         }
-    } 
+    }
+    
     return config
 
 
@@ -230,6 +229,210 @@ def get_GP20UNIT1Gpc_config(snap, laptop=False, verbose=False):
             #'datasets': ['mag_UKIRT-K_o_tot_ext', 'mag_SDSSz0.1-r_o_tot_ext'],
             'datasets': ['mag_WISE-3.6_o_tot_ext', 'mag_SDSS-r_o_tot_ext'],
             'units': ['AB apparent', 'AB apparent']
+        }
+    }
+    
+    return config
+    
+def get_GP20UNIT1Gpc_config_from_path(
+    snap: int,
+    path: str,
+    output_path: str,
+    ending: str | None = None
+    ):
+    """
+    Get configuration for UNIT 1Gpc runs
+    
+    Parameters
+    ----------
+    snap : integer
+        Snapshot number
+    path : str
+        Path to the hdf5 files
+    output_path : str
+        Path to the output files
+    ending : str, optional
+        Ending of the hdf5 files
+    
+    Returns
+    -------
+    config: dict
+        Configuration dictionary
+    """
+    # Path to files
+    if ending is None:
+        ending = 'iz'+str(snap)+'/ivol'
+
+    outroot = os.path.join(output_path, ending)
+    root = os.path.join(path, ending)
+    
+    boxside = 30 #Mpc/h (whole volume 1000Mpc/h)
+    
+    config = {
+        # Paths
+        'root': root,
+        'outroot': outroot,
+        
+        # Cosmology parameters
+        'h0': 0.6773999929428101,
+        'omega0': 0.30889999866485596,
+        'omegab': 0.04859999939799309,
+        'lambda0': 0.691100001335144,
+        'boxside': boxside,
+        'mp': 1.24718e9 ,  # Msun/h
+
+        # Metallicity calculation parameters
+        'mcold_disc': 'mcold',
+        'mcold_z_disc': 'cold_metal',
+        'mcold_burst': 'mcold_burst',
+        'mcold_z_burst': 'metals_burst',
+    }
+    config['snap'] = snap
+    
+    # File selection criteria
+    config['selection'] = {
+        'galaxies.hdf5': {
+            'group': 'Output001',
+            'datasets': ['mhhalo', 'xgal', 'ygal', 'zgal'],
+            'units': ['Msun/h', 'Mpc/h', 'Mpc/h', 'Mpc/h'],
+            'low_limits': [20 * config['mp'], 0., 0., 0.],
+            'high_limits': [None, boxside, boxside, boxside]
+        }
+    }
+    
+    # File properties to extract
+    config['file_props'] = {
+        'galaxies.hdf5': {
+            'group': 'Output001',
+            'datasets': ['redshift', 'index', 'type',
+                         'vxgal', 'vygal', 'vzgal',
+                         'rbulge', 'rcomb', 'rdisk', 'mhot', 'vbulge',
+                         'mcold', 'mcold_burst', 'cold_metal', 'metals_burst',
+                         'mstars_bulge', 'mstars_burst', 'mstars_disk',
+                         'mstardot', 'mstardot_burst', 'mstardot_average',
+                         'M_SMBH', 'SMBH_Mdot_hh', 'SMBH_Mdot_stb', 'SMBH_Spin'],
+            'units': ['redshift', 'Host halo index', 'Gal. type (central=0)',
+                      'km/s','km/s','km/s',
+                      'Mpc/h', 'Mpc/h', 'Mpc/h', 'Msun/h', 'km/s',
+                      'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h',
+                      'Msun/h', 'Msun/h', 'Msun/h',
+                      'Msun/h/Gyr', 'Msun/h/Gyr', 'Msun/h/Gyr',
+                      'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin']
+        },
+        'agn.hdf5': {
+            'group': 'Output001',
+            'datasets': ['Lbol_AGN'],
+            'units': ['1e40 h^-2 erg/s']
+        },
+        'tosedfit.hdf5': {
+        #'samp_dust.hdf5': {
+            'group': 'Output001',
+            'datasets': ['mag_UKIRT-K_o_tot_ext', 'mag_SDSSz0.1-r_o_tot_ext'],
+            #'datasets': ['mag_WISE-3.6_o_tot_ext', 'mag_SDSS-r_o_tot_ext'],
+            'units': ['AB apparent', 'AB apparent']
+        }
+    }
+    
+    return config
+
+def get_GP20_config_from_path(
+    snap: int,
+    path: str,
+    output_path: str,
+    ending: str | None = None
+):
+    """
+    Get configuration for GP20 runs
+    
+    Parameters
+    ----------
+    snap : integer
+        Snapshot number
+    laptop : bool, optional
+        If True, use local test configuration
+    verbose : bool, optional
+        If True, print further messages
+    
+    Returns
+    -------
+    config: dict
+        Configuration dictionary
+    """
+    # Path to files
+    if ending is None:
+        ending = 'iz'+str(snap)+'/ivol'
+
+    outroot = os.path.join(output_path, ending)
+    root = os.path.join(path, ending)
+        
+    boxside = 125 #Mpc/h (whole volume 500Mpc/h)
+    
+    config = {
+        # Paths
+        'root': root,
+        'outroot': outroot,
+        
+        # Cosmology parameters
+        'h0': 0.704,
+        'omega0': 0.307,
+        'omegab': 0.0482,
+        'lambda0': 0.693,
+        'boxside': boxside,
+        'mp': 9.35e8,  # Msun/h
+
+        # Metallicity calculation parameters
+        'mcold_disc': 'mcold',
+        'mcold_z_disc': 'cold_metal',
+        'mcold_burst': 'mcold_burst',
+        'mcold_z_burst': 'metals_burst',
+    }
+    config['snap'] = snap
+    
+    # File selection criteria
+    config['selection'] = {
+        'galaxies.hdf5': {
+            'group': 'Output001',
+            'datasets': ['mhhalo', 'xgal', 'ygal', 'zgal'],
+            'units': ['Msun/h', 'Mpc/h', 'Mpc/h', 'Mpc/h'],
+            'low_limits': [20 * config['mp'], 0., 0., 0.],
+            'high_limits': [None, boxside, boxside, boxside]
+        }
+    }
+    
+    # File properties to extract
+    config['file_props'] = {
+        'galaxies.hdf5': {
+            'group': 'Output001',
+            'datasets': ['redshift', 'index', 'type',
+                         'vxgal', 'vygal', 'vzgal',
+                         'rbulge', 'rcomb', 'rdisk', 'mhot', 'vbulge',
+                         'mcold', 'mcold_burst', 'cold_metal', 'metals_burst',
+                         'mstars_bulge', 'mstars_burst', 'mstars_disk',
+                         'mstardot', 'mstardot_burst', 'mstardot_average',
+                         'M_SMBH', 'SMBH_Mdot_hh', 'SMBH_Mdot_stb', 'SMBH_Spin'],
+            'units': ['redshift', 'Host halo index', 'Gal. type (central=0)',
+                      'km/s','km/s','km/s',
+                      'Mpc/h', 'Mpc/h', 'Mpc/h', 'Msun/h', 'km/s',
+                      'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h',
+                      'Msun/h', 'Msun/h', 'Msun/h',
+                      'Msun/h/Gyr', 'Msun/h/Gyr', 'Msun/h/Gyr',
+                      'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin']
+        },
+        'agn.hdf5': {
+            'group': 'Output001',
+            'datasets': ['Lbol_AGN'],
+            'units': ['1e40 h^-2 erg/s']
+        },
+        'tosedfit.hdf5': {
+            'group': 'Output001',
+            'datasets': ['mag_UKIRT-K_o_tot_ext', 'mag_SDSSz0.1-r_o_tot_ext',
+                         'L_tot_Halpha','L_tot_Halpha_ext',
+                         'L_tot_Hbeta','L_tot_Hbeta_ext',
+                         'L_tot_NII6583','L_tot_NII6583_ext',
+                         'L_tot_OII3727','L_tot_OII3727_ext',
+                         'L_tot_OIII5007','L_tot_OIII5007_ext',
+                         'L_tot_SII6716','L_tot_SII6716_ext'],
+            'units': ['AB apparent'] * 2 + ['h^2 erg/s'] * 12
         }
     }
     

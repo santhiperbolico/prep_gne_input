@@ -2,36 +2,41 @@
 Program to prepare input files for generate_nebular_emission from hdf5 files
 """
 
-from src.config import get_config
+from src.config import get_config, get_GP20UNIT1Gpc_config_from_path, get_GP20_config_from_path
 from src.validate import validate_hdf5_file
 from src.generate_input import generate_input_file
 from src.generate_test_files import generate_test_files
 
 verbose = True
 
-validate_files = False  # Check the structure of files
+validate_files = True  # Check the structure of files
 generate_files = True # Generate input for generate_nebular_emission
-generate_testing_files = False # Generate reduced input for testing
+generate_testing_files = True # Generate reduced input for testing
 
 #-------------------------------------------------------------
-#simtype = 'GP20UNIT1Gpc' # Set the file configuration adequately 
-#snap = 128
-#subvols = list(range(1))
+simtype = 'GP20UNIT1Gpc' # Set the file configuration adequately 
+snap = 128
+subvols = list(range(1))
 #-------------------------------------------------------------
-simtype = 'GP20' # Set the file configuration adequately 
-snap = 39 #61
-subvols = list(range(64))
+#simtype = 'GP20' # Set the file configuration adequately 
+#snap = 62
+#subvols = list(range(64))
 #-------------------------------------------------------------
-
 laptop = True  # Tests within laptop (different paths)
 if laptop:
     subvols = list(range(2))
+
+path = '/home/santhiperbolico/Documentos/Doctorado/ELG/gp20data'
+ending = 'ivol'    
+output_path = 'output/'
+subvols = list(range(1))
 
 percentage = 10 # Percentage for generating testing file
 subfiles = 2     # Number of testing files
     
 # Get the configuration
-config = get_config(simtype,snap,laptop=laptop)
+# config = get_config(simtype,snap,laptop=laptop)
+config = get_GP20UNIT1Gpc_config_from_path(path=path,snap=snap, ending=ending, output_path=output_path)
 
 # Validate that files have the expected structure
 if validate_files:

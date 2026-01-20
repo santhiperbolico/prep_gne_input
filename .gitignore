@@ -81,3 +81,7 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#vstudio
+.vscode/
+*.code-workspace

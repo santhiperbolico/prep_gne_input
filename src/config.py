@@ -478,5 +478,5 @@ def get_config_from_path(
 
     function_name = f'get_{simtype}_config_from_path'
     config_function = globals()[function_name]
-    config = config_function(snap, path, output_path, ending, verbose)
+    config = config_function(snap, path, output_path, ending)
     return config

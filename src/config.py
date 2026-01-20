@@ -476,7 +476,7 @@ def get_config_from_path(
     if verbose:
         print(f"Getting configuration for simulation type: {simtype}")
 
-    function_name = f'get_{simtype}_config_path'
+    function_name = f'get_{simtype}_config_from_path'
     config_function = globals()[function_name]
-    config = config_function(snap,laptop=laptop, verbose=verbose)
+    config = config_function(snap, path, output_path, ending, verbose)
     return config

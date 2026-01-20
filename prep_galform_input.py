@@ -2,7 +2,7 @@
 Program to prepare input files for generate_nebular_emission from hdf5 files
 """
 
-from src.config import get_config, get_GP20UNIT1Gpc_config_from_path, get_GP20_config_from_path
+from src.config import get_config_from_path
 from src.validate import validate_hdf5_file
 from src.generate_input import generate_input_file
 from src.generate_test_files import generate_test_files
@@ -26,7 +26,7 @@ laptop = True  # Tests within laptop (different paths)
 if laptop:
     subvols = list(range(2))
 
-path = '/home/santhiperbolico/Documentos/Doctorado/ELG/gp20data'
+path = '/home2/vgonzalez/Data/Galform/gp20data'
 ending = 'ivol'    
 output_path = 'output/'
 subvols = list(range(1))
@@ -35,8 +35,7 @@ percentage = 10 # Percentage for generating testing file
 subfiles = 2     # Number of testing files
     
 # Get the configuration
-# config = get_config(simtype,snap,laptop=laptop)
-config = get_GP20UNIT1Gpc_config_from_path(path=path,snap=snap, ending=ending, output_path=output_path)
+config = get_config_from_path(simtype=simtype, snap=snap, path=path, ending=ending, output_path=output_path)
 
 # Validate that files have the expected structure
 if validate_files:

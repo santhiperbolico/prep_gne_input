@@ -348,10 +348,12 @@ def get_GP20_config_from_path(
     ----------
     snap : integer
         Snapshot number
-    laptop : bool, optional
-        If True, use local test configuration
-    verbose : bool, optional
-        If True, print further messages
+    path : str
+        Path to the hdf5 files
+    output_path : str
+        Path to the output files
+    ending : str, optional
+        Ending of the hdf5 files
     
     Returns
     -------
@@ -436,4 +438,45 @@ def get_GP20_config_from_path(
         }
     }
     
+    return config
+
+def get_config_from_path(
+    simtype: str,
+    snap: int,
+    path: str,
+    output_path: str,
+    ending: str | None = None,
+    verbose: bool = False
+    ):
+    """
+    Get general configuration
+    
+    Parameters
+    ----------
+    simtype : str
+        Simulation type (must be in sims list)
+    snap : integer
+        Snapshot number
+    path : str
+        Path to the hdf5 files
+    output_path : str
+        Path to the output files
+    ending : str, optional
+        Ending of the hdf5 files
+    
+    Returns
+    -------
+    config: dict
+        Configuration dictionary
+    """
+
+    if simtype not in sims:
+        raise ValueError(f"Simulation type '{simtype}' not supported. Available types: {sims}")
+    
+    if verbose:
+        print(f"Getting configuration for simulation type: {simtype}")
+
+    function_name = f'get_{simtype}_config_path'
+    config_function = globals()[function_name]
+    config = config_function(snap,laptop=laptop, verbose=verbose)
     return config

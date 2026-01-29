@@ -118,6 +118,19 @@ def generate_input_file(config, ivol, verbose=False):
     mcold_burst = config['mcold_burst']
     mcold_z_burst = config['mcold_z_burst']
 
+    # Extract redshift, if exist
+    if "file_redshift" in config:
+        file_redshift = config['file_redshift']
+        zfile = file_redshift['file']
+        zgroup = file_redshift['group']
+        zdataset = file_redshift['dataset']
+        with h5py.File(path+zfile, 'r') as hdf_file:
+            hf = u.open_hdf5_group(hdf_file, zgroup)
+            zz = hf[zdataset][()]
+        with h5py.File(outfile, 'a') as outf:
+            outf['header'].attrs['redshift'] = zz
+
+
     # Loop over files with information
     count_props = -1
     file_props = config['file_props']
@@ -192,13 +205,8 @@ def generate_input_file(config, ivol, verbose=False):
                 
             # Extract properties
             for ii,prop in enumerate(datasets):
-                if prop.startswith("redshift"):
-                    if prop.endswith("_shark"):
-                        hfr = u.open_hdf5_group(hdf_file, "run_info")
-                        zz = hfr['redshift'][()]
-                    else:
-                        zz = hf[prop]
-
+                if prop=='redshift':
+                    zz = hf[prop]
                     with h5py.File(outfile, 'a') as outf:
                         outf['header'].attrs['redshift'] = zz
                 else:

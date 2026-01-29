@@ -7,16 +7,18 @@ import os
 
 sims = ['SU_UNIT'] 
 
-def get_config(simtype, snap, laptop=False, verbose=False):
+def get_config(sim, snap, subvols, laptop=False, verbose=False):
     """
     Get general configuration
     
     Parameters
     ----------
-    simtype : str
-        Simulation type (must be in sims list)
+    sim : str
+        Simulation type
     snap : integer
         Snapshot number
+    subvols : list of integers
+        List of subvolumes to be considered
     laptop : bool
         If True, use local test configuration
     verbose : bool
@@ -27,7 +29,7 @@ def get_config(simtype, snap, laptop=False, verbose=False):
     config: dict
         Configuration dictionary
     """
-
+    simtype = sim
     if simtype not in sims:
         raise ValueError(f"Simulation type '{simtype}' not supported. Available types: {sims}")
     
@@ -36,11 +38,11 @@ def get_config(simtype, snap, laptop=False, verbose=False):
 
     function_name = f'get_{simtype}_config'
     config_function = globals()[function_name]
-    config = config_function(snap,laptop=laptop, verbose=verbose)
+    config = config_function(snap, subvols, laptop=laptop, verbose=verbose)
     return config
+    
 
-
-def get_SU_UNIT_config(snap, laptop=False, label: int = 1, verbose: bool = False):
+def get_SU_UNIT_config(snap, subvols, laptop=False, verbose=False):
     """
     Get configuration for SU_UNIT runs
     
@@ -60,11 +62,11 @@ def get_SU_UNIT_config(snap, laptop=False, label: int = 1, verbose: bool = False
     """
     path = None
 
-    if label == 1:
-        path = '/data2/users/olivia/shark_output/SU1_UNIT_250/N2048_L250_fid_np_corrected/'
+    # SU1 ----------------------------
+    path = '/data2/users/olivia/shark_output/SU1_UNIT_250/N2048_L250_fid_np_corrected/'
 
-    if label == 2:
-        path = '/data2/users/olivia/shark_output/SU2_UNIT_250/N2048_L250_high_np_corrected/'
+    # SU2 ----------------------------
+    #path = '/data2/users/olivia/shark_output/SU2_UNIT_250/N2048_L250_high_np_corrected/'
 
     if path is None:
         raise ValueError(f"Label '{label}' not supported. Available labels: 1, 2")
@@ -118,12 +120,19 @@ def get_SU_UNIT_config(snap, laptop=False, label: int = 1, verbose: bool = False
     config['line_prefix'] = 'L_tot_'
     config['line_suffix_ext'] = '_ext'
 
+    # File redshift property
+    config['file_redshift'] = {
+        "file": "galaxies.hdf5",
+        "group": "run_info",
+        "dataset": "redshift",
+        "unit": "redshift"
+    }
 
     # File properties to extract
     config['file_props'] = {
         'galaxies.hdf5': {
             'group': 'galaxies',
-            'datasets': ['redshift_shark', # redshift is in run_info group, not in galaxies
+            'datasets': [
                          'id_halo', # index
                          'type',  # type
                          'velocity_x', #vxgal
@@ -150,7 +159,6 @@ def get_SU_UNIT_config(snap, laptop=False, label: int = 1, verbose: bool = False
                          'bh_spin' # 'SMBH_Spin'
                          ],
             'units': [
-                'redshift', 
                 'Host halo index', 
                 'Gal. type (central=0)',
                 'km/s','km/s','km/s',

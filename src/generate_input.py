@@ -192,8 +192,13 @@ def generate_input_file(config, ivol, verbose=False):
                 
             # Extract properties
             for ii,prop in enumerate(datasets):
-                if prop=='redshift':
-                    zz = hf[prop]
+                if prop.startswith("redshift"):
+                    if prop.endswith("_shark"):
+                        hfr = u.open_hdf5_group(hdf_file, "run_info")
+                        zz = hfr['redshift'][()]
+                    else:
+                        zz = hf[prop]
+
                     with h5py.File(outfile, 'a') as outf:
                         outf['header'].attrs['redshift'] = zz
                 else:

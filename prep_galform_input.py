@@ -27,9 +27,9 @@ subvols = [34,35] #list(range(1,63)) #list(range(1))
 #subvols = list(range(64))
 #-------------------------------------------------------------
 
-laptop = True  # Tests within laptop (different paths)
+laptop = False  # Tests within laptop (different paths)
 if laptop:
-    subvols = [42]
+    subvols = list(range(2))
 
 percentage = 10 # Percentage for generating testing file
 subfiles = 2     # Number of testing files

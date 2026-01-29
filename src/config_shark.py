@@ -5,7 +5,7 @@ import src.utils as u
 import numpy as np
 import os
 
-sims = ['SU_UNIT'] 
+sims = ['SU_UNIT', 'SUNIT_PNG100', 'SUNIT_GPC'] 
 
 def get_config(sim, snap, subvols, laptop=False, verbose=False):
     """
@@ -40,7 +40,7 @@ def get_config(sim, snap, subvols, laptop=False, verbose=False):
     config_function = globals()[function_name]
     config = config_function(snap, subvols, laptop=laptop, verbose=verbose)
     return config
-    
+
 
 def get_SU_UNIT_config(snap, subvols, laptop=False, verbose=False):
     """
@@ -74,8 +74,8 @@ def get_SU_UNIT_config(snap, subvols, laptop=False, verbose=False):
     if laptop:
         path = "/home/santhiperbolico/sam/emlines/shark/SU1_UNIT_250"
 
-    outroot = os.path.join(path, str(snap), "")
-    os.makedirs(outroot, exist_ok=True)
+    outroot = os.path.join(path, "iz"+str(snap), "ivol")
+    
 
     root = os.path.join(path, str(snap)) + "/"
 
@@ -156,7 +156,8 @@ def get_SU_UNIT_config(snap, subvols, laptop=False, verbose=False):
                          'm_bh', # 'M_SMBH'
                          'bh_accretion_rate_hh', # 'SMBH_Mdot_hh'
                          'bh_accretion_rate_sb', # 'SMBH_Mdot_stb'
-                         'bh_spin' # 'SMBH_Spin'
+                         'bh_spin', # 'SMBH_Spin'
+                         'bolometric_luminosity_agn' # 'L_bol_agn'
                          ],
             'units': [
                 'Host halo index', 
@@ -171,8 +172,279 @@ def get_SU_UNIT_config(snap, subvols, laptop=False, verbose=False):
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
                 # 'Msun/h/Gyr', 
-                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin']
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s']
         }
     } 
     return config
 
+
+def get_SUNIT_PNG100_config(snap, subvols, laptop=False, verbose=False):
+    """
+    Get configuration for UNIT_PNG100 runs
+    
+    Parameters
+    ----------
+    snap : integer
+        Snapshot number
+    laptop : bool, optional
+        If True, use local test configuration
+    verbose : bool, optional
+        If True, print further messages
+    
+    Returns
+    -------
+    config: dict
+        Configuration dictionary
+    """
+    path = None
+
+    # UNIT 1GPC
+    # fnl = 100
+
+    path = '/data2/users/olivia/shark_output/UNIT_PNG100/N4096_L1000_fnl100/'
+
+
+    if path is None:
+        raise ValueError(f"Label '{label}' not supported. Available labels: 1, 2")
+    
+    if laptop:
+        path = "/home/santhiperbolico/sam/emlines/shark/UNIT_PNG100"
+
+    outroot = os.path.join(path, "iz"+str(snap), "ivol")
+    
+
+    root = os.path.join(path, str(snap)) + "/"
+
+    boxside = 1000 #Mpc/h (whole volume 500Mpc/h)
+    
+    config = {
+        # Paths
+        'root': root,
+        'outroot': outroot,
+        'ending': None,
+        
+        # Cosmology parameters
+        'h0': 0.6774,
+        'omega0': 0.3089,
+        'omegab': 0.0486,
+        'lambda0': 0.6911,
+        'boxside': boxside,
+        'mp': 0,  # Msun/h
+
+        # Metallicity calculation parameters
+        'mcold_disc': 'mgas_disk',
+        'mcold_z_disc': 'mgas_metals_disk',
+        'mcold_burst': 'mgas_bulge', 
+        'mcold_z_burst': 'mgas_metals_bulge',
+    }
+    config['snap'] = snap
+    
+    # File selection criteria
+    config['selection'] = {
+        'galaxies.hdf5': {
+            'group': 'galaxies',
+            'datasets': [
+                'mvir_hosthalo', # mhhalo
+                'position_x', 'position_y', 'position_z'],
+            'units': ['Msun/h', 'Mpc/h', 'Mpc/h', 'Mpc/h'],
+            'low_limits': [20 * config['mp'], 0., 0., 0.],
+            'high_limits': [None, boxside, boxside, boxside]
+        }
+    }
+     # Define the lines and luminosity names
+    config['lines'] = ['Halpha', 'Hbeta', 'NII6583', 'OII3727', 'OIII5007', 'SII6716']
+    config['line_prefix'] = 'L_tot_'
+    config['line_suffix_ext'] = '_ext'
+
+    # File redshift property
+    config['file_redshift'] = {
+        "file": "galaxies.hdf5",
+        "group": "run_info",
+        "dataset": "redshift",
+        "unit": "redshift"
+    }
+
+    # File properties to extract
+    config['file_props'] = {
+        'galaxies.hdf5': {
+            'group': 'galaxies',
+            'datasets': [
+                         'id_halo', # index
+                         'type',  # type
+                         'velocity_x', #vxgal
+                         'velocity_y', #vygal
+                         'velocity_z', #vzgal
+                         'rgas_bulge', #rbulge
+                         #'rcomb', # rcomb doesn't exist in SHARK
+                         'rgas_disk', #rdisk
+                         'mhot', #mhot
+                         #'vbulge',# vbulge doesn't exist in SHARK 
+                         'mgas_disk', #'mcold'
+                         'mgas_bulge', # 'mcold_burst'
+                         'mgas_metals_disk', # 'cold_metal'
+                         'mgas_metals_bulge', # 'metals_burst',
+                         'mstars_bulge',  # mstars_bulge
+                         #'mstars_burst', # mstars_burst maybe is associated to mstars_burst_diskinstabilities and mstars_burst_mergers
+                         'mstars_disk',  # mstars_disk
+                         'sfr_disk', # mstardot
+                         'sfr_burst', # mstardot_burst
+                         #'mstardot_average',# doesn't exist in SHARK
+                         'm_bh', # 'M_SMBH'
+                         'bh_accretion_rate_hh', # 'SMBH_Mdot_hh'
+                         'bh_accretion_rate_sb', # 'SMBH_Mdot_stb'
+                         'bh_spin', # 'SMBH_Spin'
+                         'bolometric_luminosity_agn' # 'L_bol_agn'
+                         ],
+            'units': [
+                'Host halo index', 
+                'Gal. type (central=0)',
+                'km/s','km/s','km/s',
+                'Mpc/h', 
+                #'Mpc/h', 
+                'Mpc/h', 'Msun/h', 
+                #'km/s',
+                'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
+                # 'Msun/h', 
+                'Msun/h', 'Msun/h/Gyr', 
+                'Msun/h/Gyr', 
+                # 'Msun/h/Gyr', 
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s']
+        }
+    } 
+    return config
+
+
+
+def get_SUNIT_GPC_config(snap, subvols, laptop=False, verbose=False):
+    """
+    Get configuration for UNIT_1GPC runs
+    
+    Parameters
+    ----------
+    snap : integer
+        Snapshot number
+    laptop : bool, optional
+        If True, use local test configuration
+    verbose : bool, optional
+        If True, print further messages
+    
+    Returns
+    -------
+    config: dict
+        Configuration dictionary
+    """
+    path = None
+
+    # UNIT 1GPC
+    # fnl = 0
+    path = '/data2/users/olivia/shark_output/UNIT_1GPC/N4096_L1000_fid/'
+
+
+    if path is None:
+        raise ValueError(f"Label '{label}' not supported. Available labels: 1, 2")
+    
+    if laptop:
+        path = "/home/santhiperbolico/sam/emlines/shark/UNIT_1GPC"
+
+    outroot = os.path.join(path, "iz"+str(snap), "ivol")
+    
+
+    root = os.path.join(path, str(snap)) + "/"
+
+    boxside = 1000 #Mpc/h (whole volume 500Mpc/h)
+    
+    config = {
+        # Paths
+        'root': root,
+        'outroot': outroot,
+        'ending': None,
+        
+        # Cosmology parameters
+        'h0': 0.6774,
+        'omega0': 0.3089,
+        'omegab': 0.0486,
+        'lambda0': 0.6911,
+        'boxside': boxside,
+        'mp': 0,  # Msun/h
+
+        # Metallicity calculation parameters
+        'mcold_disc': 'mgas_disk',
+        'mcold_z_disc': 'mgas_metals_disk',
+        'mcold_burst': 'mgas_bulge', 
+        'mcold_z_burst': 'mgas_metals_bulge',
+    }
+    config['snap'] = snap
+    
+    # File selection criteria
+    config['selection'] = {
+        'galaxies.hdf5': {
+            'group': 'galaxies',
+            'datasets': [
+                'mvir_hosthalo', # mhhalo
+                'position_x', 'position_y', 'position_z'],
+            'units': ['Msun/h', 'Mpc/h', 'Mpc/h', 'Mpc/h'],
+            'low_limits': [20 * config['mp'], 0., 0., 0.],
+            'high_limits': [None, boxside, boxside, boxside]
+        }
+    }
+     # Define the lines and luminosity names
+    config['lines'] = ['Halpha', 'Hbeta', 'NII6583', 'OII3727', 'OIII5007', 'SII6716']
+    config['line_prefix'] = 'L_tot_'
+    config['line_suffix_ext'] = '_ext'
+
+    # File redshift property
+    config['file_redshift'] = {
+        "file": "galaxies.hdf5",
+        "group": "run_info",
+        "dataset": "redshift",
+        "unit": "redshift"
+    }
+
+    # File properties to extract
+    config['file_props'] = {
+        'galaxies.hdf5': {
+            'group': 'galaxies',
+            'datasets': [
+                         'id_halo', # index
+                         'type',  # type
+                         'velocity_x', #vxgal
+                         'velocity_y', #vygal
+                         'velocity_z', #vzgal
+                         'rgas_bulge', #rbulge
+                         #'rcomb', # rcomb doesn't exist in SHARK
+                         'rgas_disk', #rdisk
+                         'mhot', #mhot
+                         #'vbulge',# vbulge doesn't exist in SHARK 
+                         'mgas_disk', #'mcold'
+                         'mgas_bulge', # 'mcold_burst'
+                         'mgas_metals_disk', # 'cold_metal'
+                         'mgas_metals_bulge', # 'metals_burst',
+                         'mstars_bulge',  # mstars_bulge
+                         #'mstars_burst', # mstars_burst maybe is associated to mstars_burst_diskinstabilities and mstars_burst_mergers
+                         'mstars_disk',  # mstars_disk
+                         'sfr_disk', # mstardot
+                         'sfr_burst', # mstardot_burst
+                         #'mstardot_average',# doesn't exist in SHARK
+                         'm_bh', # 'M_SMBH'
+                         'bh_accretion_rate_hh', # 'SMBH_Mdot_hh'
+                         'bh_accretion_rate_sb', # 'SMBH_Mdot_stb'
+                         'bh_spin', # 'SMBH_Spin'
+                         'bolometric_luminosity_agn' # 'L_bol_agn'
+                         ],
+            'units': [
+                'Host halo index', 
+                'Gal. type (central=0)',
+                'km/s','km/s','km/s',
+                'Mpc/h', 
+                #'Mpc/h', 
+                'Mpc/h', 'Msun/h', 
+                #'km/s',
+                'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
+                # 'Msun/h', 
+                'Msun/h', 'Msun/h/Gyr', 
+                'Msun/h/Gyr', 
+                # 'Msun/h/Gyr', 
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s']
+        }
+    } 
+    return config

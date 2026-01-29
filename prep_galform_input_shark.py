@@ -14,17 +14,17 @@ generate_files = True # Generate input for generate_nebular_emission
 generate_testing_files = False # Generate reduced input for testing
 
 #-------------------------------------------------------------
-#sim = 'GP20SU_1' #'GP20SU_2'
-#snap = 96
-#subvols = list(range(2))
+# sim = 'SUNIT_PNG100'
+# snap = 103
+# subvols = [42] #list(range(64))
 #-------------------------------------------------------------
-sim = 'SU_UNIT' #'GP20UNIT1Gpc_fnl100' 
-snap = 104
-subvols = [42] #list(range(1,63)) #list(range(1))
+# sim = 'SU_UNIT' #'GP20UNIT1Gpc_fnl100' 
+# snap = 104
+# subvols = [42] #list(range(64))
 #-------------------------------------------------------------
-#sim = 'GP20cosma' # Set the file configuration adequately 
-#snap = 39 #61
-#subvols = list(range(64))
+sim = 'SUNIT_GPC' # Set the file configuration adequately 
+snap = 104 
+subvols = list(range(64))
 #-------------------------------------------------------------
 
 laptop = True  # Tests within laptop (different paths)

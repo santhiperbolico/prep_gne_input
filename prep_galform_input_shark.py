@@ -18,13 +18,13 @@ generate_testing_files = False # Generate reduced input for testing
 # snap = 103
 # subvols = [42] #list(range(64))
 #-------------------------------------------------------------
-# sim = 'SU_UNIT' #'GP20UNIT1Gpc_fnl100' 
-# snap = 104
-# subvols = [42] #list(range(64))
+sim = 'SU_UNIT' #'GP20UNIT1Gpc_fnl100' 
+snap = 104
+subvols = [42] #list(range(64))
 #-------------------------------------------------------------
-sim = 'SUNIT_GPC' # Set the file configuration adequately 
-snap = 104 
-subvols = list(range(64))
+# sim = 'SUNIT_GPC' # Set the file configuration adequately 
+# snap = 104 
+# subvols = list(range(64))
 #-------------------------------------------------------------
 
 laptop = True  # Tests within laptop (different paths)

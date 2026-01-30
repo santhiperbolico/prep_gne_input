@@ -10,8 +10,8 @@ from src.generate_test_files import generate_test_files
 verbose = True
 
 validate_files = True  # Check the structure of files
-generate_files = True # Generate input for generate_nebular_emission
-generate_testing_files = False # Generate reduced input for testing
+generate_files = False # Generate input for generate_nebular_emission
+generate_testing_files = True # Generate reduced input for testing
 
 #-------------------------------------------------------------
 # sim = 'SUNIT_PNG100'
@@ -31,7 +31,7 @@ laptop = True  # Tests within laptop (different paths)
 if laptop:
     subvols = [42]
 
-percentage = 10 # Percentage for generating testing file
+percentage = 1 # Percentage for generating testing file
 subfiles = 2     # Number of testing files
     
 # Get the configuration

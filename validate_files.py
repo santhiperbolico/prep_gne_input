@@ -3,9 +3,10 @@ from src.prep_input import prep_input
 
 verbose = True
 nvol = 64
+SIM = "Shark"
 
 # Shark in taurus
-taurus_sims_GP20 = [
+taurus_sims_Shark = [
     ('SharkSU_1', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
     ('SharkSU_2', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
     ('SharkUNIT1Gpc_fnl0', [128, 109, 104, 98, 97, 90, 87, 81, 78], list(range(nvol))),
@@ -27,8 +28,17 @@ cosma_sims_GP20 = [
     ('GP20cosma', [39, 61], list(range(64)))
 ]
 
+simtypes = {
+    "Shark": taurus_sims_Shark,
+    "GP20": taurus_sims_GP20,
+    "cosma": cosma_sims_GP20
+}
+
 # Loop over the relevant simulations
-simulations = taurus_sims_GP20
-for sim, snaps, subvols in taurus_sims_GP20:
+try:
+    simulations = simtypes[SIM]
+except KeyError:
+    raise ValueError(f"Simulation type '{SIM}' not supported. Available types: {simtypes.keys()}")
+for sim, snaps, subvols in simulations:
     for snap in snaps:
         prep_input(sim, snap, subvols, verbose=verbose)

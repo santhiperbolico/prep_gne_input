@@ -9,8 +9,12 @@ SIM = "Shark"
 taurus_sims_Shark = [
     ('SharkSU_1', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
     ('SharkSU_2', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
-    ('SharkUNIT1Gpc_fnl0', [128, 109, 104, 98, 97, 90, 87, 81, 78], list(range(nvol))),
-    ('SharkUNIT1Gpc_fnl100', [127, 108, 103, 97, 95, 89, 86, 77], list(range(nvol))),
+    ('SharkUNIT1Gpc_fnl0', [109, 104, 98, 90, 87], list(range(nvol))),
+    ('SharkUNIT1Gpc_fnl0', [128], list(range(5))),
+    ('SharkUNIT1Gpc_fnl0', [81], [0, 1, 2, 5] + list(range(10, 27)) + [28, 34, 35] + list(range(39, nvol))),
+    ('SharkUNIT1Gpc_fnl0', [78], list(range(6))),
+    ('SharkUNIT1Gpc_fnl100', [108, 103, 97, 89, 86], list(range(nvol))),
+    ('SharkUNIT1Gpc_fnl100', [127, 95, 77], [0]),
 ]
 
 # Galform in taurus

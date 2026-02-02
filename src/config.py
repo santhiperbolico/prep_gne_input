@@ -454,19 +454,21 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
         Configuration dictionary
     """
     path = None
+    output_path = None
 
     if cosmo_var is None or cosmo_var=='1':
         path = '/data2/users/olivia/shark_output/SU1_UNIT_250/N2048_L250_fid_np_corrected/'
-        output_path = '/home2/vgonzalez/Data/Shark/SU1'
+        output_path = '/home2/vgonzalez/Data/Shark/SU1/'
     if cosmo_var=='2':
         path = '/data2/users/olivia/shark_output/SU2_UNIT_250/N2048_L250_high_np_corrected/'
-        output_path = '/home2/vgonzalez/Data/Shark/SU2'
+        output_path = '/home2/vgonzalez/Data/Shark/SU2/'
 
     if path is None or output_path is None:
-        raise ValueError(f"Label '{label}' not supported. Available labels: 1, 2")
+        raise ValueError(f"Label '{cosmo_var}' not supported. Available cosmo_var: 1, 2")
     
     if laptop:
         path = "/home/santhiperbolico/sam/emlines/shark/SU1_UNIT_250"
+        output_path = path
 
     outroot = os.path.join(output_path, "iz"+str(snap), "ivol")
     
@@ -603,20 +605,20 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
 
     if cosmo_var is None or cosmo_var=='fnl0':
         path = '/data2/users/olivia/shark_output/UNIT_1GPC/N4096_L1000_fid/'
-        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl0'
+        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl0/'
         if laptop:
-            path = "/home/santhiperbolico/sam/emlines/shark/UNIT_1GPC"
+            path = "/home/santhiperbolico/sam/emlines/shark/UNIT_1GPC/"
             output_path = path
 
     if cosmo_var=='fnl100':
         path = '/data2/users/olivia/shark_output/UNIT_PNG100/N4096_L1000_fnl100/'
-        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl100'
+        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl100/'
         if laptop:
-            path = "/home/santhiperbolico/sam/emlines/shark/UNIT_PNG100"
+            path = "/home/santhiperbolico/sam/emlines/shark/UNIT_PNG100/"
             output_path = path
 
     if path is None or output_path is None:
-        raise ValueError(f"Cosmo Var '{cosmo_var}' not supported. Available labels: fnl0, fnl100")
+        raise ValueError(f"Cosmo Var '{cosmo_var}' not supported. Available cosmo_var: fnl0, fnl100")
     
 
     outroot = os.path.join(output_path, "iz"+str(snap), "ivol")

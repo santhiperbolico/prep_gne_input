@@ -551,7 +551,9 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
                          'bh_accretion_rate_hh', # 'SMBH_Mdot_hh'
                          'bh_accretion_rate_sb', # 'SMBH_Mdot_stb'
                          'bh_spin', # 'SMBH_Spin'
-                         'bolometric_luminosity_agn' # 'L_bol_agn'
+                         'bolometric_luminosity_agn', # 'L_bol_agn'
+                         'mstars_burst_diskinstabilities',
+                         'mstars_burst_mergers'
                          ],
             'units': [
                 'Host halo index', 
@@ -562,7 +564,7 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
-                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s']
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h']
         }
     } 
     return config
@@ -694,7 +696,9 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
                          'bh_accretion_rate_hh', # 'SMBH_Mdot_hh'
                          'bh_accretion_rate_sb', # 'SMBH_Mdot_stb'
                          'bh_spin', # 'SMBH_Spin'
-                         'bolometric_luminosity_agn' # 'L_bol_agn'
+                         'bolometric_luminosity_agn', # 'L_bol_agn'
+                         'mstars_burst_diskinstabilities',
+                         'mstars_burst_mergers'
                          ],
             'units': [
                 'Host halo index', 
@@ -705,7 +709,7 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
-                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s']
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h']
         }
     } 
     return config

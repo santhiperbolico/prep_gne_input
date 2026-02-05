@@ -119,7 +119,7 @@ def generate_input_file(config, ivol, verbose=False):
     mcold_z_burst = config['mcold_z_burst']
 
     # Stellar mass variables
-    mstar_burst = config.get('mstar_burst', 'mstar_burst')
+    mstars_burst = config.get('mstars_burst', 'mstars_burst')
     mstars_burst_diskinstabilities = config.get('mstars_burst_diskinstabilities', 'mstars_burst_diskinstabilities')
     mstars_burst_mergers = config.get('mstars_burst_mergers', 'mstars_burst_mergers')
 
@@ -158,8 +158,8 @@ def generate_input_file(config, ivol, verbose=False):
             Zbst = np.ones(len(mask), dtype=float)
 
         # Check if mstar_burst need to be calculated
-        mstar_burst_components = {mstar_burst, mstars_burst_diskinstabilities, mstars_burst_mergers}
-        calc_MStarBurst = not mstar_burst_components.isdisjoint(datasets)
+        calc_MStarBurst = not mstars_burst in datasets
+        calc_MStarBurst = calc_MStarBurst and set([mstars_burst_diskinstabilities, mstars_burst_mergers]).issubset(datasets)
         if calc_MStarBurst:
             MStarBurst = np.zeros(len(mask), dtype=float)
 
@@ -228,7 +228,7 @@ def generate_input_file(config, ivol, verbose=False):
                         vals = vals[mask]
                     if vals is None: continue
 
-                    if calc_MStarBurst and (prop in [mstar_burst, mstars_burst_diskinstabilities, mstars_burst_mergers]):
+                    if calc_MStarBurst and (prop in [mstars_burst_diskinstabilities, mstars_burst_mergers]):
                         MStarBurst += vals
 
                     if calc_Zdisc and (prop==mcold_disc or prop==mcold_z_disc):
@@ -275,7 +275,7 @@ def generate_input_file(config, ivol, verbose=False):
         # Write stellar mass, if required
         if calc_MStarBurst:
             with h5py.File(outfile, 'a') as outf:
-                dd = outf['data'].create_dataset(mstar_burst, data=MStarBurst)
+                dd = outf['data'].create_dataset(mstars_burst, data=MStarBurst)
                 dd.attrs['units'] = 'Msun/h'
         
         # Write luminosity ratios, if required

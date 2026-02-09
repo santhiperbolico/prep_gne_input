@@ -564,31 +564,7 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
-                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h'
-                ],
-            "prop_names":{
-                'id_halo': "index",
-                'type': "type",
-                'velocity_x': "vxgal",
-                'velocity_y': "vygal",
-                'velocity_z': "vzgal",
-                'rgas_bulge': "rbulge",
-                'rgas_disk': "rdisk",
-                'mhot': "mhot",
-                'mgas_disk': "mcold",
-                'mgas_bulge': "mcold_burst",
-                'mgas_metals_disk': "cold_metal",
-                'mgas_metals_bulge': "metals_burst",
-                'mstars_bulge': "mstars_bulge",
-                'mstars_disk': "mstars_disk",
-                'sfr_disk': "mstardot",
-                'sfr_burst': "mstardot_burst",
-                'm_bh': "M_SMBH",
-                'bh_accretion_rate_hh': "SMBH_Mdot_hh",
-                'bh_accretion_rate_sb': "SMBH_Mdot_stb",
-                'bh_spin': "SMBH_Spin",
-                'bolometric_luminosity_agn': "L_bol_agn",
-            }
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h']
         }
     } 
     return config
@@ -733,30 +709,7 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
-                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h'],
-            "prop_names":{
-                'id_halo': "index",
-                'type': "type",
-                'velocity_x': "vxgal",
-                'velocity_y': "vygal",
-                'velocity_z': "vzgal",
-                'rgas_bulge': "rbulge",
-                'rgas_disk': "rdisk",
-                'mhot': "mhot",
-                'mgas_disk': "mcold",
-                'mgas_bulge': "mcold_burst",
-                'mgas_metals_disk': "cold_metal",
-                'mgas_metals_bulge': "metals_burst",
-                'mstars_bulge': "mstars_bulge",
-                'mstars_disk': "mstars_disk",
-                'sfr_disk': "mstardot",
-                'sfr_burst': "mstardot_burst",
-                'm_bh': "M_SMBH",
-                'bh_accretion_rate_hh': "SMBH_Mdot_hh",
-                'bh_accretion_rate_sb': "SMBH_Mdot_stb",
-                'bh_spin': "SMBH_Spin",
-                'bolometric_luminosity_agn': "L_bol_agn",
-            }
+                'Msun/h', 'Msun/h/Gyr', 'Msun/h/Gyr', 'Spin', '1e40 erg/s', 'Msun/h', 'Msun/h']
         }
     } 
     return config

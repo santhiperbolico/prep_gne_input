@@ -250,9 +250,7 @@ def generate_input_file(config, ivol, verbose=False):
                                 vals += tomag
                                 if verbose:
                                     print(f'- Converting {prop} into an apparent mag')
-                            
-                            prop_name = props.get('prop_names', {}).get(prop, prop)
-                            dd = outf['data'].create_dataset(prop_name, data=vals)
+                            dd = outf['data'].create_dataset(prop, data=vals)
                             dd.attrs['units'] = props['units'][ii]
                     
                     if calc_ratios and (prop in L_nom or prop in L_ext_nom):

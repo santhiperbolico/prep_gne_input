@@ -133,6 +133,7 @@ def get_GP20cosma_config(snap, subvols, cosmo_var=None, laptop=False, verbose=Fa
         'galaxies.hdf5': {
             'group': 'Output###',
             'datasets': ['redshift', 'index', 'type',
+                         'xgal', 'ygal', 'zgal',   
                          'vxgal', 'vygal', 'vzgal',
                          'rbulge', 'rcomb', 'rdisk', 'mhot', 'vbulge',
                          'mcold', 'mcold_burst', 'cold_metal', 'metals_burst',
@@ -140,6 +141,7 @@ def get_GP20cosma_config(snap, subvols, cosmo_var=None, laptop=False, verbose=Fa
                          'mstardot', 'mstardot_burst', 'mstardot_average',
                          'M_SMBH', 'SMBH_Mdot_hh', 'SMBH_Mdot_stb', 'SMBH_Spin'],
             'units': ['redshift', 'Host halo index', 'Gal. type (central=0)',
+                      'Mpc/h', 'Mpc/h', 'Mpc/h',
                       'km/s','km/s','km/s',
                       'Mpc/h', 'Mpc/h', 'Mpc/h', 'Msun/h', 'km/s',
                       'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h',
@@ -265,6 +267,7 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
         'galaxies.hdf5': {
             'group': group,
             'datasets': ['redshift', 'index', 'type',
+                         'xgal', 'ygal', 'zgal',   
                          'vxgal', 'vygal', 'vzgal',
                          'rbulge', 'rcomb', 'rdisk', 'mhot', 'vbulge',
                          'mcold', 'mcold_burst', 'cold_metal', 'metals_burst',
@@ -272,6 +275,7 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
                          'mstardot', 'mstardot_burst', 'mstardot_average',
                          'M_SMBH', 'SMBH_Mdot_hh', 'SMBH_Mdot_stb', 'SMBH_Spin'],
             'units': ['redshift', 'Host halo index', 'Gal. type (central=0)',
+                      'Mpc/h', 'Mpc/h', 'Mpc/h',
                       'km/s','km/s','km/s',
                       'Mpc/h', 'Mpc/h', 'Mpc/h', 'Msun/h', 'km/s',
                       'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h',
@@ -400,6 +404,7 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
         'galaxies.hdf5': {
             'group': group,
             'datasets': ['redshift', 'index', 'type',
+                         'xgal', 'ygal', 'zgal',   
                          'vxgal', 'vygal', 'vzgal',
                          'rbulge', 'rcomb', 'rdisk', 'mhot', 'vbulge',
                          'mcold', 'mcold_burst', 'cold_metal', 'metals_burst',
@@ -407,6 +412,7 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
                          'mstardot', 'mstardot_burst', 'mstardot_average',
                          'M_SMBH', 'SMBH_Mdot_hh', 'SMBH_Mdot_stb', 'SMBH_Spin'],
             'units': ['redshift', 'Host halo index', 'Gal. type (central=0)',
+                      'Mpc/h', 'Mpc/h', 'Mpc/h',
                       'km/s','km/s','km/s',
                       'Mpc/h', 'Mpc/h', 'Mpc/h', 'Msun/h', 'km/s',
                       'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h',
@@ -533,6 +539,9 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
             'datasets': [
                          'id_halo', # index
                          'type',  # type
+                         'position_x', #xgal
+                         'position_y', #ygal
+                         'position_z', #zgal
                          'velocity_x', #vxgal
                          'velocity_y', #vygal
                          'velocity_z', #vzgal
@@ -558,6 +567,7 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
             'units': [
                 'Host halo index', 
                 'Gal. type (central=0)',
+                'Mpc/h', 'Mpc/h', 'Mpc/h',
                 'km/s','km/s','km/s',
                 'Mpc/h', 
                 'Mpc/h', 'Msun/h', 
@@ -678,6 +688,9 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
             'datasets': [
                          'id_halo', # index
                          'type',  # type
+                         'position_x', #xgal
+                         'position_y', #ygal
+                         'position_z', #zgal
                          'velocity_x', #vxgal
                          'velocity_y', #vygal
                          'velocity_z', #vzgal
@@ -703,6 +716,7 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
             'units': [
                 'Host halo index', 
                 'Gal. type (central=0)',
+                'Mpc/h', 'Mpc/h', 'Mpc/h',
                 'km/s','km/s','km/s',
                 'Mpc/h', 
                 'Mpc/h', 'Msun/h', 

@@ -7,30 +7,35 @@ nvol = 64
 SIM = "GP20"
 
 submit_jobs = True  # False for only generating the scripts
-check_all_jobs = True
+check_all_jobs = False
 clean = False
 
 taurus_sims_Shark = [
-    ('SharkSU_1', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
-    ('SharkSU_2', [128, 109, 104, 98, 96, 90, 87, 78], list(range(nvol))),
-    ('SharkUNIT1Gpc_fnl0', [109, 104, 98, 90, 87], list(range(nvol))),
-    ('SharkUNIT1Gpc_fnl0', [128], list(range(5))),
-    ('SharkUNIT1Gpc_fnl0', [81], [0, 1, 2, 5] + list(range(10, 27)) + [28, 34, 35] + list(range(39, nvol))),
-    ('SharkUNIT1Gpc_fnl0', [78], list(range(6))),
-    ('SharkUNIT1Gpc_fnl100', [108, 103, 97, 89, 86], list(range(nvol))),
-    ('SharkUNIT1Gpc_fnl100', [127, 95, 77], [0]),
+    ('SharkSU_1', [90, 87, 86, 81, 74, 65, 96, 98, 104, 109], list(range(nvol))),
+    ('SharkSU_2', [90, 87, 86, 81, 74, 65, 96, 98, 104, 109], list(range(nvol))),
+    ('SharkUNIT1Gpc_fnl0', [90, 87, 86, 81, 74, 65, 96, 98, 104, 109], list(range(nvol))),
+    ('SharkUNIT1Gpc_fnl100', [89, 86, 85, 80, 73, 64, 95, 97, 103, 108], list(range(nvol))),
 ]
 
 
 # Galform in taurus
 taurus_sims_GP20 = [
-    #('GP20SU_1', [109, 104, 98, 90, 87, 128, 96, 78], list(range(nvol))),
-    ('GP20SU_1', [109, 104, 98, 90, 96, 78], list(range(nvol))),
-    ('GP20SU_2', [109, 104, 98, 90, 87], list(range(nvol))),
-    ('GP20UNIT1Gpc_fnl0', [98, 109, 87, 90, 104], [0] + list(range(3, nvol))),
-    ('GP20UNIT1Gpc_fnl0', [128,109,105,104,103,101,98,92,90,87,84,81,79,77], [1,2]),
-    ('GP20UNIT1Gpc_fnl100', [127, 108, 103, 97, 95, 89, 86, 77], [0]),
-    ('GP20UNIT1Gpc_fnl100', [108, 103, 97, 89, 86], list(range(1, nvol))),
+    # ('GP20SU_1', [90, 87, 86, 81, 74, 65, 96, 98, 104, 109], list(range(nvol))),
+    # ('GP20SU_2', [90, 87, 86, 81, 74, 65, 96, 98, 104, 109], list(range(nvol))),
+    #('GP20UNIT1Gpc_fnl0', [109, 65, 74, 81, 86, 97], list(range(nvol))),
+    ('GP20UNIT1Gpc_fnl0', [87, 90, 104], [0] + list(range(3, nvol))),
+    ('GP20UNIT1Gpc_fnl0', [87, 90, 104], [1, 2]),
+    #('GP20UNIT1Gpc_fnl100', [80, 73, 64], list(range(nvol))),
+    ('GP20UNIT1Gpc_fnl100', [86, 89, 97, 103, 108], list(range(1,nvol))),
+    ('GP20UNIT1Gpc_fnl100', [86, 89, 97, 103, 108], [0]),
+    # ('GP20SU_1', [104], list(range(nvol))),
+    # ('GP20UNIT1Gpc_fnl0', [98, 109, 87, 90, 104], [0] + list(range(3, nvol))),
+    # ('GP20UNIT1Gpc_fnl0', [128,109,105,104,103,101,98,92,90,87,84,81,79,77], [1,2]),
+    # ('GP20UNIT1Gpc_fnl100', [127, 108, 103, 97, 95, 89, 86, 77], [0]),
+    # ('GP20UNIT1Gpc_fnl100', [108, 103, 97, 89, 86], list(range(1, nvol))),
+    #('GP20UNIT1Gpc_fnl0', [97],list(range(nvol))),
+    # ('GP20UNIT1Gpc_fnl100', [97],list(range(1,nvol))),
+    # ('GP20UNIT1Gpc_fnl100', [97],[0]),
 ]
 
 # Galform in cosma

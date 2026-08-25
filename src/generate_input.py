@@ -64,7 +64,7 @@ def generate_input_file(config, ivol, verbose=False):
     path = u.get_path(config['root'],ivol,ending=config['ending'])
     except_file = config.get('except_file')
     if except_file is not None:
-        except_path =  u.get_path(config['root'],ivol)
+        except_path =  u.get_path(config['root'],ivol, ending=config['ending_file'])
 
     # Make the selection, if relevant
     nomask = False; mask = None

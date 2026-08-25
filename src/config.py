@@ -105,7 +105,7 @@ def get_GP20cosma_config(snap, subvols, cosmo_var=None, laptop=False, verbose=Fa
         'mcold_z_burst': 'metals_burst',
     }
     config['snap'] = snap
-    
+
     # File selection criteria
     config['selection'] = {
         'galaxies.hdf5': {
@@ -189,25 +189,31 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
     
     # Path to files
     if cosmo_var is None or cosmo_var == '1': # SU1
-        outpath = '/home2/vgonzalez/Data/Galform/SU1/'
+        outpath = '/data21/users/vgonzalez/Data/Galform_to_copy/SU1/'
         dirs = ['/data2/users/olivia/galform_output/SU1/SU1_250MPC_np_corrected/',
-                '/data2/users/olivia/galform_output/SU1/SU1_z_tests/']
+                '/data2/users/olivia/galform_output/SU1/SU1_z_tests/',
+                '/data2/users/olivia/galform_output/SU1/QSO_evo/']
         if snap in [109, 104, 98, 90, 87]:
             path = dirs[0]
         elif snap in [128, 96, 78]:
             path = dirs[1]
+        elif snap in [65, 74, 81, 86]:
+            path = dirs[2]
         else:
             raise ValueError(f"Check that the snapshot {snap} is",
                              f" within the directories {dirs}")
     else: # SU2
         ln_As = ln_As + np.log(1.05)
-        outpath = '/home2/vgonzalez/Data/Galform/SU2/'
+        outpath = '/data21/users/vgonzalez/Data/Galform_to_copy/SU2/'
         dirs = ['/data2/users/olivia/galform_output/SU2/SU2_250MPC_np_corrected/',
-                '/data2/users/olivia/galform_output/SU2/SU2_z_tests/']
+                '/data2/users/olivia/galform_output/SU2/SU2_z_tests/',
+                '/data2/users/olivia/galform_output/SU2/QSO_evo/']
         if snap in [109, 104, 98, 90, 87]:
             path = dirs[0]
         elif snap in [128, 96, 78]:
             path = dirs[1]
+        elif snap in [65, 74, 81, 86]:
+            path = dirs[2]
         else:
             raise ValueError(f"Check that the snapshot {snap} is",
                              f" within the directories {dirs}")
@@ -226,7 +232,8 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
         'outroot': outroot,
         'ending': ending,
         'except_file': 'galaxies.hdf5',
-        
+        'ending_file': None,
+
         # Cosmology parameters
         'h0': 0.6774,
         'omega0': 0.3089,
@@ -235,7 +242,7 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
         'boxside': boxside,
         'mp': 1.558975e8,  # Msun/h
         'ln_As' : ln_As,  
-        
+
         # Metallicity calculation parameters
         'mcold_disc': 'mcold',
         'mcold_z_disc': 'cold_metal',
@@ -243,7 +250,7 @@ def get_GP20SU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False)
         'mcold_z_burst': 'metals_burst',
     }
     config['snap'] = snap
-    
+
     # File selection criteria
     config['selection'] = {
         'galaxies.hdf5': {
@@ -333,20 +340,36 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
     
     # Path to files
     if cosmo_var is None or cosmo_var == 'fnl0':
-        outpath = '/home2/vgonzalez/Data/Galform/UNIT1GPC_fnl0/'
+        outpath = '/data21/users/vgonzalez/Data/Galform_to_copy/UNIT1GPC_fnl0/'
         dirs = ['/data2/users/olivia/galform_output/UNIT_PNG/LRG_1_and_3/',
-                '/data2/users/olivia/galform_output/UNIT_PNG/UNIT_1GPC/']
+                '/data2/users/olivia/galform_output/UNIT_PNG/UNIT_1GPC/',
+                "/data2/users/olivia/galform_output/UNIT_PNG/SAGE_comparison/",
+                "/data2/users/olivia/galform_output/UNIT_PNG/QSO_evo/"
+                ]
         if snap in [98,109]:
             path = dirs[0]
-        elif snap in [87,90,104,128,109,105,103,101,98,92,84,81,79,77]:
+        elif snap in [97]:
+            path = dirs[2]
+        elif snap in [87,90,104,128,109,105,103,101,98,92,84,79,77]:
             path = dirs[1]
+        elif snap in [65, 74, 81, 86]:
+            path = dirs[3]
         else:
             raise ValueError(f"Check that the snapshot {snap} is",
                              f" within the directories {dirs}")
     else:
         fnl = 100
-        outpath = '/home2/vgonzalez/Data/Galform/UNIT1GPC_fnl100/'
-        path = '/data2/users/olivia/galform_output/UNIT_PNG100/UNITPNG100_1GPC/'
+        outpath = '/data21/users/vgonzalez/Data/Galform_to_copy/UNIT1GPC_fnl100/'
+        dirs = ['/data2/users/olivia/galform_output/UNIT_PNG100/UNITPNG100_1GPC/',
+                '/data2/users/olivia/galform_output/UNIT_PNG100/QSO_evo/'
+                ]
+        if snap in [127, 108, 103, 97, 95, 89, 86, 77]:
+            path = dirs[0]
+        elif snap in [85, 80, 73, 64]:
+            path = dirs[1]
+        else:
+            raise ValueError(f"Check that the snapshot {snap} is",
+                             f" within the directories {dirs}")
         
     ending = 'iz'+str(snap)
     root = path+'ivol'
@@ -356,6 +379,10 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
 
     # Runs with several z output, need to find out group name
     group = u.get_group_name(root,snap,subvols)
+
+    ending_file = None
+    if snap in [97] and cosmo_var == 'fnl0':
+        ending_file = 'iz'+str(snap)
     
     config = {
         # Paths
@@ -363,7 +390,8 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
         'outroot': outroot,
         'ending': ending,
         'except_file': 'galaxies.hdf5',
-        
+        'ending_file': ending_file,
+
         # Cosmology parameters
         'h0': 0.6774,
         'omega0': 0.3089,
@@ -372,7 +400,7 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
         'boxside': boxside,
         'mp': 1.24718e9,  # Msun/h
         'fnl' : fnl,  
-        
+
         # Metallicity calculation parameters
         'mcold_disc': 'mcold',
         'mcold_z_disc': 'cold_metal',
@@ -380,11 +408,12 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
         'mcold_z_burst': 'metals_burst',
     }
     config['snap'] = snap
-    
+
     # File selection criteria
     config['selection'] = {
         'galaxies.hdf5': {
             'group': group,
+            'ending': ending_file,
             'datasets': ['mhhalo'],
             'units': ['Msun/h'],
             'low_limits': [20 * config['mp']],
@@ -406,6 +435,7 @@ def get_GP20UNIT1Gpc_config(snap, subvols, cosmo_var='fnl0',
     config['file_props'] = {
         'galaxies.hdf5': {
             'group': group,
+            'ending': ending_file,
             'datasets': ['redshift', 'index', 'type',
                          'xgal', 'ygal', 'zgal',   
                          'vxgal', 'vygal', 'vzgal',
@@ -469,10 +499,10 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
 
     if cosmo_var is None or cosmo_var=='1':
         path = '/data2/users/olivia/shark_output/SU1_UNIT_250/N2048_L250_fid_np_corrected/'
-        output_path = '/home2/vgonzalez/Data/Shark/SU1/'
+        output_path = '/data21/users/vgonzalez/Data/Shark/SU1/'
     if cosmo_var=='2':
         path = '/data2/users/olivia/shark_output/SU2_UNIT_250/N2048_L250_high_np_corrected/'
-        output_path = '/home2/vgonzalez/Data/Shark/SU2/'
+        output_path = '/data21/users/vgonzalez/Data/Shark/SU2/'
 
     if path is None or output_path is None:
         raise ValueError(f"Label '{cosmo_var}' not supported. Available cosmo_var: 1, 2")
@@ -509,7 +539,7 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
         'mcold_z_burst': 'mgas_metals_bulge',
     }
     config['snap'] = snap
-    
+
     # File selection criteria
     config['selection'] = {
         'galaxies.hdf5': {
@@ -550,6 +580,8 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
                          'velocity_z', #vzgal
                          'rgas_bulge', #rbulge
                          'rgas_disk', #rdisk
+                         'rstar_bulge', #rstar_bulge
+                         'rstar_disk', #rstar_disk
                          'mhot', #mhot
                          'mgas_disk', #'mcold'
                          'mgas_bulge', # 'mcold_burst'
@@ -573,7 +605,7 @@ def get_SharkSU_config(snap, subvols, cosmo_var='1', laptop=False, verbose=False
                 'Mpc/h', 'Mpc/h', 'Mpc/h',
                 'km/s','km/s','km/s',
                 'Mpc/h', 
-                'Mpc/h', 'Msun/h', 
+                'Mpc/h', 'Mpc/h', 'Mpc/h','Msun/h', 
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
@@ -614,14 +646,14 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
 
     if cosmo_var is None or cosmo_var=='fnl0':
         path = '/data2/users/olivia/shark_output/UNIT_1GPC/N4096_L1000_fid/'
-        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl0/'
+        output_path = '/data21/users/vgonzalez/Data/Shark/UNIT1GPC_fnl0/'
         if laptop:
             path = "/home/santhiperbolico/sam/emlines/shark/UNIT_1GPC/"
             output_path = path
 
     if cosmo_var=='fnl100':
         path = '/data2/users/olivia/shark_output/UNIT_PNG100/N4096_L1000_fnl100/'
-        output_path = '/home2/vgonzalez/Data/Shark/UNIT1GPC_fnl100/'
+        output_path = '/data21/users/vgonzalez/Data/Shark/UNIT1GPC_fnl100/'
         if laptop:
             path = "/home/santhiperbolico/sam/emlines/shark/UNIT_PNG100/"
             output_path = path
@@ -658,7 +690,7 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
         'mcold_z_burst': 'mgas_metals_bulge',
     }
     config['snap'] = snap
-    
+
     # File selection criteria
     config['selection'] = {
         'galaxies.hdf5': {
@@ -699,6 +731,8 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
                          'velocity_z', #vzgal
                          'rgas_bulge', #rbulge
                          'rgas_disk', #rdisk
+                         'rstar_bulge', #rstar_bulge
+                         'rstar_disk', #rstar_disk
                          'mhot', #mhot
                          'mgas_disk', #'mcold'
                          'mgas_bulge', # 'mcold_burst'
@@ -722,7 +756,7 @@ def get_SharkUNIT1Gpc_config(snap, subvols, cosmo_var='fnl0', laptop=False, verb
                 'Mpc/h', 'Mpc/h', 'Mpc/h',
                 'km/s','km/s','km/s',
                 'Mpc/h', 
-                'Mpc/h', 'Msun/h', 
+                'Mpc/h', 'Mpc/h', 'Mpc/h','Msun/h', 
                 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 'Msun/h', 
                 'Msun/h', 'Msun/h/Gyr', 
                 'Msun/h/Gyr', 
